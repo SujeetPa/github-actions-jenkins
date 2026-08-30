@@ -6,7 +6,7 @@ on:
 
 jobs:
   trigger-jenkins:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted  # Uses slave-1 instead of GitHub servers
     
     steps:
       - name: Trigger Jenkins Job
