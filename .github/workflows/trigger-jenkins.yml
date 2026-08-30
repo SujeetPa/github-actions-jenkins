@@ -1,12 +1,30 @@
-name: Trigger Jenkins Job
+name: CI Pipeline
 
 on:
   push:
     branches: [main]
 
 jobs:
+  build:
+    runs-on: self-hosted
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Build
+        run: |
+          echo "Building..."
+          docker build -t myapp:${{ github.run_number }} .
+      
+      - name: Test
+        run: |
+          echo "Testing..."
+          docker run --rm myapp:${{ github.run_number }} echo "Tests passed!"
+
   trigger-jenkins:
-    runs-on: self-hosted  # Uses slave-1 instead of GitHub servers
+    runs-on: self-hosted
+    needs: build  # Runs after build succeeds
     
     steps:
       - name: Trigger Jenkins Job
